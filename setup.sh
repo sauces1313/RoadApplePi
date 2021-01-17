@@ -26,15 +26,15 @@ fi
 # Update System #
 #################
 echo -e "\e[1;4;93mStep 1. Updating system\e[0m"
-sudo apt update
-sudo apt upgrade -y
+apt update
+apt upgrade -y
 
 ###########################################
 # Install pre-built dependencies from Apt #
 ###########################################
 echo -e "\e[1;4;93mStep 2. Install pre-built dependencies from Apt\e[0m"
-sudo apt install -y dnsmasq hostapd libbluetooth-dev apache2 php7.0 php7.0-mysql php7.0-bcmath mariadb-server libmariadbclient-dev libmariadbclient-dev-compat uvcdynctrl
-sudo systemctl disable hostapd dnsmasq
+apt install -y dnsmasq hostapd libbluetooth-dev apache2 php7.3 php7.3-mysql php7.3-bcmath mariadb-server libmariadbclient-dev libmariadbclient-dev-compat uvcdynctrl
+systemctl disable hostapd dnsmasq
 
 ################
 # Build FFMpeg #
@@ -49,7 +49,7 @@ then
 	echo "./configure --enable-gpl --enable-nonfree --enable-mmal --enable-omx --enable-omx-rpi"
 	./configure --enable-gpl --enable-nonfree --enable-mmal --enable-omx --enable-omx-rpi
 	make -j$(nproc)
-	sudo make install
+	make install
 else
 	echo "FFMpeg already found at $ffmpegLocation! Using installed version."
 fi
@@ -60,25 +60,25 @@ fi
 echo -e "\e[1;4;93mStep 4. Building and installing RoadApplePi\e[0m"
 cd ..
 make
-sudo make install
+make install
 
-sudo cp -r html /var/www/
-sudo rm /var/www/html/index.html
-sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 0755 /var/www/html
-sudo cp raprec.service /lib/systemd/system
-sudo chown root:root /lib/systemd/system/raprec.service
-sudo chmod 0755 /lib/systemd/system/raprec.service
-sudo systemctl daemon-reload
-sudo systemctl enable raprec
-sudo cp hostapd-rap.conf /etc/hostapd
-sudo cp dnsmasq.conf /etc
-sudo mkdir /var/www/html/vids
-sudo chown -R www-data:www-data /var/www/html
+cp -r html /var/www/
+rm /var/www/html/index.html
+chown -R www-data:www-data /var/www/html
+chmod -R 0755 /var/www/html
+cp raprec.service /lib/systemd/system
+chown root:root /lib/systemd/system/raprec.service
+chmod 0755 /lib/systemd/system/raprec.service
+systemctl daemon-reload
+systemctl enable raprec
+cp hostapd-rap.conf /etc/hostapd
+cp dnsmasq.conf /etc
+mkdir /var/www/html/vids
+chown -R www-data:www-data /var/www/html
 
 installDate=$(date)
 cp roadapplepi.sql roadapplepi-configd.sql
 echo "INSERT INTO env (name, value) VALUES (\"rapVersion\", \"$softwareVersion\"), (\"installDate\", \"$installDate\");" >> roadapplepi-configd.sql
-sudo mysql < roadapplepi-configd.sql
+mysql < roadapplepi-configd.sql
 
 echo "Done! Please reboot your Raspberry Pi now"

@@ -33,7 +33,7 @@ RoadApplePi is designed to work with as little or much as you have. Bare minimum
 	sudo apt update && sudo apt install -y git
 	git clone https://github.com/JVital2013/RoadApplePi
 	cd RoadApplePi
-	./setup.sh
+	sudo ./setup.sh
 	sudo reboot
 	```
 	The setup script may take several hours to run, depending on your Raspberry Pi model
